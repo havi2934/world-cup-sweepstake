@@ -36,6 +36,10 @@ const countryCodes = {
   "Spain": "es"
 };
 
+/* =========================
+   HELPERS
+========================= */
+
 function flagUrl(team) {
   const code = countryCodes[team];
   return code ? `https://flagcdn.com/w40/${code}.png` : "";
@@ -49,16 +53,23 @@ function getRemainingTeams(playerTeams) {
   return playerTeams.filter(team => !isEliminated(team));
 }
 
+/* IMPORTANT: fixes JS date parsing issues */
+function parseDate(dateStr) {
+  return new Date(dateStr + "T00:00:00");
+}
+
 /* =========================
    FIXTURES FEATURE
 ========================= */
 
 function getUpcomingFixtures(fixtures) {
+  if (!fixtures) return [];
+
   const now = new Date();
 
   return fixtures
-    .filter(f => new Date(f.date) >= now)
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+    .filter(f => parseDate(f.date) >= now)
+    .sort((a, b) => parseDate(a.date) - parseDate(b.date));
 }
 
 function getNextThreeFixtures(fixtures) {
@@ -87,14 +98,14 @@ function renderNextFixtures() {
         <div class="next-fixture-row">
           <div>
             <strong>${f.home}</strong>
-            <span class="owner">(${homePlayer})</span>
+            <span class="owner">(${homePlayer || "—"})</span>
             vs
             <strong>${f.away}</strong>
-            <span class="owner">(${awayPlayer})</span>
+            <span class="owner">(${awayPlayer || "—"})</span>
           </div>
 
           <div style="opacity:0.7">
-            ${new Date(f.date).toLocaleDateString("en-GB", {
+            ${parseDate(f.date).toLocaleDateString("en-GB", {
               weekday: "short",
               day: "numeric",
               month: "short"
@@ -107,22 +118,19 @@ function renderNextFixtures() {
 }
 
 /* =========================
-   EXISTING CODE
+   LEADERBOARD
 ========================= */
 
 function renderLeaderboard() {
   const leaderboard = document.getElementById("leaderboard");
 
   const rows = Object.entries(sweepstake.players)
-    .map(([player, teams]) => {
-      const remaining = getRemainingTeams(teams).length;
-
-      return { player, remaining };
-    })
+    .map(([player, teams]) => ({
+      player,
+      remaining: getRemainingTeams(teams).length
+    }))
     .sort((a, b) => {
-      if (b.remaining !== a.remaining) {
-        return b.remaining - a.remaining;
-      }
+      if (b.remaining !== a.remaining) return b.remaining - a.remaining;
       return a.player.localeCompare(b.player);
     });
 
@@ -141,6 +149,10 @@ function renderLeaderboard() {
     `).join("")}
   `;
 }
+
+/* =========================
+   PLAYERS
+========================= */
 
 function renderPlayers() {
   const container = document.getElementById("players");
@@ -178,6 +190,10 @@ function renderPlayers() {
     })
     .join("");
 }
+
+/* =========================
+   SUMMARY
+========================= */
 
 function updateSummary() {
   const totalRemaining = Object.values(sweepstake.players)
