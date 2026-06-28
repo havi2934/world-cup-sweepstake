@@ -12,5 +12,6 @@ const sweepstake = {
     // add knocked-out teams here, e.g.
     // "Canada",
     // "Norway"
+    "South Africa"
   ]
 };
