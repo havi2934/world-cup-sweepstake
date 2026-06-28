@@ -49,6 +49,95 @@ function getRemainingTeams(playerTeams) {
   return playerTeams.filter(team => !isEliminated(team));
 }
 
+/* =========================
+   🆕 FIXTURES FEATURE
+========================= */
+
+function getUpcomingFixtures(fixtures) {
+  const now = new Date();
+
+  return fixtures
+    .filter(f => new Date(f.date) >= now)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+function getNextMatchForTeam(team, fixtures) {
+  const upcoming = getUpcomingFixtures(fixtures);
+
+  return upcoming.find(f =>
+    f.home === team || f.away === team
+  );
+}
+
+function buildNextFixturesByPlayer() {
+  const result = [];
+
+  if (!sweepstake.fixtures) return result;
+
+  for (const [player, teams] of Object.entries(sweepstake.players)) {
+
+    let bestMatch = null;
+    let bestTeam = null;
+
+    for (const team of teams) {
+      const match = getNextMatchForTeam(team, sweepstake.fixtures);
+
+      if (match) {
+        if (!bestMatch || new Date(match.date) < new Date(bestMatch.date)) {
+          bestMatch = match;
+          bestTeam = team;
+        }
+      }
+    }
+
+    if (bestMatch) {
+      const opponent =
+        bestMatch.home === bestTeam
+          ? bestMatch.away
+          : bestMatch.home;
+
+      result.push({
+        player,
+        team: bestTeam,
+        opponent,
+        date: bestMatch.date
+      });
+    }
+  }
+
+  return result;
+}
+
+function renderNextFixtures() {
+  const container = document.getElementById("next-fixtures");
+  if (!container) return;
+
+  const data = buildNextFixturesByPlayer();
+
+  container.innerHTML = `
+    <h2>Next Fixtures</h2>
+    ${data.map(d => `
+      <div class="next-fixture-row">
+        <strong>${d.player}</strong> —
+        <img class="flag" src="${flagUrl(d.team)}"> ${d.team}
+        vs
+        <img class="flag" src="${flagUrl(d.opponent)}"> ${d.opponent}
+        <span style="opacity:0.7">
+          (${new Date(d.date).toLocaleDateString("en-GB", {
+            weekday: "short",
+            day: "numeric",
+            month: "short"
+          })})
+        </span>
+      </div>
+    `).join("")}
+  `;
+}
+
+/* =========================
+   EXISTING CODE (UNCHANGED)
+========================= */
+
 function renderLeaderboard() {
   const leaderboard = document.getElementById("leaderboard");
 
@@ -102,10 +191,10 @@ function renderPlayers() {
               return `
                 <div class="team ${eliminated ? "out" : "alive"}">
                   ${eliminated
-              ? "❌"
-  : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`
-}
-${team}
+                    ? "❌"
+                    : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`
+                  }
+                  ${team}
                 </div>
               `;
             }).join("")}
@@ -128,10 +217,15 @@ function updateSummary() {
   document.getElementById("teamsRemaining").textContent = totalRemaining;
 }
 
+/* =========================
+   INIT (UPDATED)
+========================= */
+
 function init() {
   renderLeaderboard();
   renderPlayers();
   updateSummary();
+  renderNextFixtures(); // 🆕 added
 }
 
 init();
