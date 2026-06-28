@@ -50,7 +50,7 @@ function getRemainingTeams(playerTeams) {
 }
 
 /* =========================
-   🆕 FIXTURES FEATURE
+   FIXTURES FEATURE
 ========================= */
 
 function getUpcomingFixtures(fixtures) {
@@ -61,81 +61,53 @@ function getUpcomingFixtures(fixtures) {
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 }
 
-function getNextMatchForTeam(team, fixtures) {
-  const upcoming = getUpcomingFixtures(fixtures);
-
-  return upcoming.find(f =>
-    f.home === team || f.away === team
-  );
+function getNextThreeFixtures(fixtures) {
+  return getUpcomingFixtures(fixtures).slice(0, 3);
 }
 
-function buildNextFixturesByPlayer() {
-  const result = [];
-
-  if (!sweepstake.fixtures) return result;
-
+function getPlayerByTeam(team) {
   for (const [player, teams] of Object.entries(sweepstake.players)) {
-
-    let bestMatch = null;
-    let bestTeam = null;
-
-    for (const team of teams) {
-      const match = getNextMatchForTeam(team, sweepstake.fixtures);
-
-      if (match) {
-        if (!bestMatch || new Date(match.date) < new Date(bestMatch.date)) {
-          bestMatch = match;
-          bestTeam = team;
-        }
-      }
-    }
-
-    if (bestMatch) {
-      const opponent =
-        bestMatch.home === bestTeam
-          ? bestMatch.away
-          : bestMatch.home;
-
-      result.push({
-        player,
-        team: bestTeam,
-        opponent,
-        date: bestMatch.date
-      });
-    }
+    if (teams.includes(team)) return player;
   }
-
-  return result;
+  return null;
 }
 
 function renderNextFixtures() {
   const container = document.getElementById("next-fixtures");
-  if (!container) return;
+  if (!container || !sweepstake.fixtures) return;
 
-  const data = buildNextFixturesByPlayer();
+  const fixtures = getNextThreeFixtures(sweepstake.fixtures);
 
   container.innerHTML = `
-    <h2>Next Fixtures</h2>
-    ${data.map(d => `
-      <div class="next-fixture-row">
-        <strong>${d.player}</strong> —
-        <img class="flag" src="${flagUrl(d.team)}"> ${d.team}
-        vs
-        <img class="flag" src="${flagUrl(d.opponent)}"> ${d.opponent}
-        <span style="opacity:0.7">
-          (${new Date(d.date).toLocaleDateString("en-GB", {
-            weekday: "short",
-            day: "numeric",
-            month: "short"
-          })})
-        </span>
-      </div>
-    `).join("")}
+    ${fixtures.map(f => {
+      const homePlayer = getPlayerByTeam(f.home);
+      const awayPlayer = getPlayerByTeam(f.away);
+
+      return `
+        <div class="next-fixture-row">
+          <div>
+            <strong>${f.home}</strong>
+            <span class="owner">(${homePlayer})</span>
+            vs
+            <strong>${f.away}</strong>
+            <span class="owner">(${awayPlayer})</span>
+          </div>
+
+          <div style="opacity:0.7">
+            ${new Date(f.date).toLocaleDateString("en-GB", {
+              weekday: "short",
+              day: "numeric",
+              month: "short"
+            })}
+          </div>
+        </div>
+      `;
+    }).join("")}
   `;
 }
 
 /* =========================
-   EXISTING CODE (UNCHANGED)
+   EXISTING CODE
 ========================= */
 
 function renderLeaderboard() {
@@ -145,10 +117,7 @@ function renderLeaderboard() {
     .map(([player, teams]) => {
       const remaining = getRemainingTeams(teams).length;
 
-      return {
-        player,
-        remaining
-      };
+      return { player, remaining };
     })
     .sort((a, b) => {
       if (b.remaining !== a.remaining) {
@@ -188,6 +157,7 @@ function renderPlayers() {
           <div class="teams">
             ${teams.map(team => {
               const eliminated = isEliminated(team);
+
               return `
                 <div class="team ${eliminated ? "out" : "alive"}">
                   ${eliminated
@@ -218,14 +188,14 @@ function updateSummary() {
 }
 
 /* =========================
-   INIT (UPDATED)
+   INIT
 ========================= */
 
 function init() {
   renderLeaderboard();
   renderPlayers();
   updateSummary();
-  renderNextFixtures(); // 🆕 added
+  renderNextFixtures();
 }
 
 init();
