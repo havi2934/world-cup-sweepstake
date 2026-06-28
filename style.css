@@ -55,6 +55,14 @@ body {
   margin-top: 4px;
 }
 
+.flag {
+  width: 20px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+
 /* MAIN LAYOUT */
 main {
   max-width: 1100px;
