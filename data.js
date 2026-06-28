@@ -10,5 +10,16 @@ const sweepstake = {
 
   eliminatedTeams: [
     "South Africa"
+  ],
+
+  fixtures: [
+    { date: "2026-06-29", home: "Brazil", away: "Japan" },
+    { date: "2026-06-29", home: "Germany", away: "Paraguay" },
+    { date: "2026-06-29", home: "Netherlands", away: "Morocco" },
+    { date: "2026-06-30", home: "France", away: "Sweden" },
+    { date: "2026-07-01", home: "England", away: "DR Congo" },
+    { date: "2026-07-01", home: "Belgium", away: "Senegal" },
+    { date: "2026-07-02", home: "Spain", away: "Austria" },
+    { date: "2026-07-02", home: "Portugal", away: "Croatia" }
   ]
 };
