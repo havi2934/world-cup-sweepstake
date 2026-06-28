@@ -1,3 +1,46 @@
+const countryCodes = {
+  "France": "fr",
+  "Croatia": "hr",
+  "Austria": "at",
+  "Senegal": "sn",
+  "Belgium": "be",
+
+  "Paraguay": "py",
+  "Australia": "au",
+  "Ghana": "gh",
+  "Netherlands": "nl",
+  "England": "gb-eng",
+
+  "Ecuador": "ec",
+  "Bosnia and Herzegovina": "ba",
+  "USA": "us",
+  "Mexico": "mx",
+  "Morocco": "ma",
+
+  "Egypt": "eg",
+  "Cape Verde": "cv",
+  "Ivory Coast": "ci",
+  "Germany": "de",
+  "Argentina": "ar",
+
+  "Switzerland": "ch",
+  "Algeria": "dz",
+  "South Africa": "za",
+  "Portugal": "pt",
+  "Brazil": "br",
+
+  "Japan": "jp",
+  "DR Congo": "cd",
+  "Sweden": "se",
+  "Colombia": "co",
+  "Spain": "es"
+};
+
+function flagUrl(team) {
+  const code = countryCodes[team];
+  return code ? `https://flagcdn.com/w40/${code}.png` : "";
+}
+
 function isEliminated(team) {
   return sweepstake.eliminatedTeams.includes(team);
 }
@@ -58,8 +101,11 @@ function renderPlayers() {
               const eliminated = isEliminated(team);
               return `
                 <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? "❌ " : "🇳🇱 "}
-                  ${team}
+                  ${eliminated
+              ? "❌"
+  : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`
+}
+${team}
                 </div>
               `;
             }).join("")}
