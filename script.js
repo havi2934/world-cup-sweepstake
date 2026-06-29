@@ -61,14 +61,12 @@ function parseDate(dateStr) {
 /* =========================
    FIXTURES FEATURE
 ========================= */
-
 function getUpcomingFixtures(fixtures) {
-  if (!fixtures) return [];
-
-  const now = new Date();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   return fixtures
-    .filter(f => parseDate(f.date) >= now)
+    .filter(f => parseDate(f.date) >= today)
     .sort((a, b) => parseDate(a.date) - parseDate(b.date));
 }
 
