@@ -53,8 +53,12 @@ function getRemainingTeams(playerTeams) {
   return playerTeams.filter(team => !isEliminated(team));
 }
 
-/* IMPORTANT: fixes JS date parsing issues */
+function getAllPlayerTeams(player) {
+  const playerData = sweepstake.players[player];
+  return [playerData.topSix, playerData.midTier, ...playerData.restOfWorld];
+}
 
+/* IMPORTANT: fixes JS date parsing issues */
 
 function parseDateTime(fixture) {
   return new Date(`${fixture.date}T${fixture.time}:00`);
@@ -71,14 +75,14 @@ function getUpcomingFixtures(fixtures) {
     .sort((a, b) => parseDateTime(a) - parseDateTime(b));
 }
 
-
 function getNextThreeFixtures(fixtures) {
   return getUpcomingFixtures(fixtures).slice(0, 3);
 }
 
 function getPlayerByTeam(team) {
-  for (const [player, teams] of Object.entries(sweepstake.players)) {
-    if (teams.includes(team)) return player;
+  for (const [player, playerData] of Object.entries(sweepstake.players)) {
+    const allTeams = [playerData.topSix, playerData.midTier, ...playerData.restOfWorld];
+    if (allTeams.includes(team)) return player;
   }
   return null;
 }
@@ -105,12 +109,12 @@ function renderNextFixtures() {
           </div>
 
           <div style="opacity:0.7">
-  ${parseDateTime(f).toLocaleDateString("en-GB", {
-    weekday: "short",
-    day: "numeric",
-    month: "short"
-  })} • ${f.time}
-</div>
+            ${parseDateTime(f).toLocaleDateString("en-GB", {
+              weekday: "short",
+              day: "numeric",
+              month: "short"
+            })} • ${f.time}
+          </div>
         </div>
       `;
     }).join("")}
@@ -125,10 +129,13 @@ function renderLeaderboard() {
   const leaderboard = document.getElementById("leaderboard");
 
   const rows = Object.entries(sweepstake.players)
-    .map(([player, teams]) => ({
-      player,
-      remaining: getRemainingTeams(teams).length
-    }))
+    .map(([player, playerData]) => {
+      const allTeams = getAllPlayerTeams(player);
+      return {
+        player,
+        remaining: getRemainingTeams(allTeams).length
+      };
+    })
     .sort((a, b) => {
       if (b.remaining !== a.remaining) return b.remaining - a.remaining;
       return a.player.localeCompare(b.player);
@@ -158,24 +165,43 @@ function renderPlayers() {
   const container = document.getElementById("players");
 
   container.innerHTML = Object.entries(sweepstake.players)
-    .map(([player, teams]) => {
-
-      const remainingTeams = getRemainingTeams(teams);
+    .map(([player, playerData]) => {
+      const allTeams = getAllPlayerTeams(player);
+      const remainingTeams = getRemainingTeams(allTeams);
 
       return `
         <div class="player-card">
           <h3>${player}</h3>
 
           <div class="teams">
-            ${teams.map(team => {
+            <div style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 8px; font-weight: 600;">Top 6</div>
+            ${[playerData.topSix].map(team => {
               const eliminated = isEliminated(team);
-
               return `
                 <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated
-                    ? "❌"
-                    : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`
-                  }
+                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${team}
+                </div>
+              `;
+            }).join("")}
+
+            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">7-12 Seeds</div>
+            ${[playerData.midTier].map(team => {
+              const eliminated = isEliminated(team);
+              return `
+                <div class="team ${eliminated ? "out" : "alive"}">
+                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${team}
+                </div>
+              `;
+            }).join("")}
+
+            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">Best of the Rest</div>
+            ${playerData.restOfWorld.map(team => {
+              const eliminated = isEliminated(team);
+              return `
+                <div class="team ${eliminated ? "out" : "alive"}">
+                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
                   ${team}
                 </div>
               `;
@@ -191,13 +217,41 @@ function renderPlayers() {
     .join("");
 }
 
+function renderBestOfRest() {
+  const container = document.getElementById("best-of-rest");
+  
+  const players = Object.entries(sweepstake.players)
+    .map(([player, playerData]) => {
+      const remaining = getRemainingTeams(playerData.restOfWorld);
+      return {
+        player,
+        remaining: remaining.length,
+        teams: remaining
+      };
+    })
+    .sort((a, b) => {
+      if (b.remaining !== a.remaining) return b.remaining - a.remaining;
+      return a.player.localeCompare(b.player);
+    });
+
+  container.innerHTML = `
+    ${players.map((p, i) => `
+      <div class="best-of-rest-row">
+        <div style="font-weight: 600;">${i + 1}. ${p.player}</div>
+        <div style="opacity: 0.7;">${p.remaining} team${p.remaining !== 1 ? "s" : ""} remaining</div>
+        <div>${p.teams.map(team => `<img class="flag" src="${flagUrl(team)}" alt="${team}" title="${team}">`).join('')}</div>
+      </div>
+    `).join("")}
+  `;
+}
+
 /* =========================
    SUMMARY
 ========================= */
 
 function updateSummary() {
   const totalRemaining = Object.values(sweepstake.players)
-    .flat()
+    .flatMap(playerData => [playerData.topSix, playerData.midTier, ...playerData.restOfWorld])
     .filter(team => !isEliminated(team)).length;
 
   document.getElementById("teamsRemaining").textContent = totalRemaining;
@@ -210,6 +264,7 @@ function updateSummary() {
 function init() {
   renderLeaderboard();
   renderPlayers();
+  renderBestOfRest();
   updateSummary();
   renderNextFixtures();
 }

@@ -1,11 +1,35 @@
 const sweepstake = {
   players: {
-    "Harry": ["Croatia", "Austria", "Senegal", "Belgium", "France"],
-    "Joe": ["Paraguay", "Australia", "Ghana", "Netherlands", "England"],
-    "Polly": ["Ecuador", "Bosnia and Herzegovina", "USA", "Mexico", "Morocco"],
-    "Maya": ["Egypt", "Cape Verde", "Ivory Coast", "Germany", "Argentina"],
-    "Mary": ["Switzerland", "Algeria", "South Africa", "Portugal", "Brazil"],
-    "Voz": ["Japan", "DR Congo", "Sweden", "Colombia", "Spain"]
+    "Harry": {
+      topSix: "France",
+      midTier: "Belgium",
+      restOfWorld: ["Croatia", "Senegal", "Austria"]
+    },
+    "Joe": {
+      topSix: "England",
+      midTier: "Netherlands",
+      restOfWorld: ["Paraguay", "Australia", "Ghana"]
+    },
+    "Polly": {
+      topSix: "Morocco",
+      midTier: "Mexico",
+      restOfWorld: ["Ecuador", "Bosnia and Herzegovina", "USA"]
+    },
+    "Maya": {
+      topSix: "Argentina",
+      midTier: "Germany",
+      restOfWorld: ["Egypt", "Cape Verde", "Ivory Coast"]
+    },
+    "Mary": {
+      topSix: "Brazil",
+      midTier: "Portugal",
+      restOfWorld: ["Switzerland", "Algeria", "South Africa"]
+    },
+    "Voz": {
+      topSix: "Spain",
+      midTier: "Colombia",
+      restOfWorld: ["Japan", "DR Congo", "Sweden"]
+    }
   },
 
   eliminatedTeams: [
