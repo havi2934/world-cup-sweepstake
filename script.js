@@ -279,7 +279,7 @@ function renderLeaderboard() {
     </div>
     ${rows.map((r, i) => `
       <div class="leaderboard-row${positions[i] === 1 ? " winner" : ""}">
-        <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
+        <div>${positions[i]}</div>
         <div>${r.player}</div>
         <div>${r.remaining === 0 ? r.eliminationRound || "—" : r.remaining}</div>
       </div>
@@ -334,7 +334,7 @@ function renderBestOfRest() {
     </div>
     ${players.map((p, i) => `
       <div class="leaderboard-row${positions[i] === 1 ? " winner" : ""}">
-        <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
+        <div>${positions[i]}</div>
         <div>${p.player}</div>
         <div>${p.remaining === 0 ? p.eliminationRound || "—" : p.remaining}</div>
       </div>
