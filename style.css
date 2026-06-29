@@ -79,7 +79,27 @@ main {
   font-size: 1.3rem;
 }
 
-/* LEADERBOARD */
+/* LEADERBOARDS */
+.leaderboards-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  min-width: 0;
+}
+
+.leaderboards-container .section {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 22px;
+}
+
+.leaderboards-container .section h2 {
+  margin-bottom: 18px;
+}
+
 .table {
   display: flex;
   flex-direction: column;
@@ -91,18 +111,29 @@ main {
   display: grid;
   grid-template-columns: 60px 1fr 120px;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
+  min-width: 0;
 }
 
 .leaderboard-header {
   background: rgba(255,255,255,0.06);
   font-weight: 600;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .leaderboard-row {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.05);
+}
+
+.leaderboard-row:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+.leaderboard-row div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* PLAYERS GRID */
@@ -117,11 +148,12 @@ main {
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
   padding: 16px;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .player-card:hover {
   transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.16);
 }
 
 .player-card h3 {
@@ -177,4 +209,10 @@ footer {
   font-size: 0.8rem;
   opacity: 0.6;
   border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+@media (max-width: 940px) {
+  .leaderboards-container {
+    grid-template-columns: 1fr;
+  }
 }
