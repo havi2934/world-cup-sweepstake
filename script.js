@@ -101,9 +101,10 @@ function renderTeam(team) {
 }
 
 /* IMPORTANT: fixes JS date parsing issues */
+const fixtureTimeZoneOffset = "+01:00"; // UK tournament time (BST)
 
 function parseDateTime(fixture) {
-  return new Date(`${fixture.date}T${fixture.time}:00`);
+  return new Date(`${fixture.date}T${fixture.time}:00${fixture.timezoneOffset || fixtureTimeZoneOffset}`);
 }
 
 function getFixtureEndTime(fixture) {
@@ -199,6 +200,16 @@ function renderNextFixtures() {
       const awayPlayer = getPlayerByTeam(f.away);
       const status = getFixtureStatus(f);
       const isLive = status === "live";
+      const kickoff = parseDateTime(f);
+      const localDate = kickoff.toLocaleDateString("en-GB", {
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+      });
+      const localTime = kickoff.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
 
       return `
         <div class="next-fixture-row${isLive ? " live" : ""}">
@@ -212,8 +223,8 @@ function renderNextFixtures() {
 
           <div class="fixture-meta">
             ${isLive
-              ? `<span class="live-badge">LIVE</span> ${parseDateTime(f).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}`
-              : `${parseDateTime(f).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })} • ${f.time}`}
+              ? `<span class="live-badge">LIVE</span> ${localDate} • ${localTime}`
+              : `${localDate} • ${localTime}`}
           </div>
         </div>
       `;
