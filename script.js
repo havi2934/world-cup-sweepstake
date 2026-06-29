@@ -91,11 +91,10 @@ function getAllPlayerTeams(player) {
 function renderTeam(team) {
   const eliminated = isEliminated(team);
   const eliminationRound = getEliminationRound(team);
-  const marker = eliminated ? "❌ " : "";
 
   return `
     <div class="team ${eliminated ? "out" : "alive"}">
-      ${marker}<img class="flag" src="${flagUrl(team)}" alt="${team} flag">
+      <img class="flag" src="${flagUrl(team)}" alt="${team} flag">
       ${team}${eliminated && eliminationRound ? ` (${eliminationRound})` : ""}
     </div>
   `;
