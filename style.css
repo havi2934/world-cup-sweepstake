@@ -111,6 +111,12 @@ main {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.table > div {
+  min-width: 100%;
 }
 
 .leaderboard-header,
@@ -120,6 +126,12 @@ main {
   padding: 12px 14px;
   border-radius: 12px;
   min-width: 0;
+}
+
+.leaderboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .leaderboard-header {
@@ -302,5 +314,80 @@ footer {
 @media (max-width: 940px) {
   .leaderboards-container {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  body {
+    font-size: 0.95rem;
+  }
+
+  .hero {
+    padding: 28px 16px;
+  }
+
+  .summary {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section h2 {
+    font-size: 1.15rem;
+  }
+
+  .leaderboard-header,
+  .leaderboard-row,
+  .golden-boot-header,
+  .golden-boot-row {
+    padding: 10px 12px;
+  }
+
+  .next-fixture-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fixture-meta {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .leaderboard-header,
+  .leaderboard-row {
+    grid-template-columns: 50px 1fr 1fr;
+  }
+
+  .golden-boot-header,
+  .golden-boot-row {
+    grid-template-columns: 35px 1fr 110px 110px 60px;
+  }
+
+  .leaderboard-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .golden-boot-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .team {
+    font-size: 0.9rem;
+  }
+
+  .footer {
+    font-size: 0.82rem;
   }
 }
