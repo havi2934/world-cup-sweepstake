@@ -143,6 +143,36 @@ main {
   text-overflow: ellipsis;
 }
 
+.golden-boot-header,
+.golden-boot-row {
+  display: grid;
+  grid-template-columns: 45px 1fr 150px 140px 80px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  min-width: 0;
+}
+
+.golden-boot-header {
+  background: rgba(255,255,255,0.06);
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.golden-boot-row {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.golden-boot-row:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+.golden-boot-row div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* PLAYERS GRID */
 .grid {
   display: grid;

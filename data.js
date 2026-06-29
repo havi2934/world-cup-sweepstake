@@ -36,6 +36,14 @@ const sweepstake = {
     { team: "South Africa", round: "R32" }
   ],
 
+  goldenBoot: [
+    { player: "Kylian Mbappé", team: "France", goals: 6 },
+    { player: "Harry Kane", team: "England", goals: 5 },
+    { player: "Lionel Messi", team: "Argentina", goals: 5 },
+    { player: "Neymar", team: "Brazil", goals: 4 },
+    { player: "Luka Modrić", team: "Croatia", goals: 4 }
+  ],
+
  fixtures: [
   // Round of 32
 

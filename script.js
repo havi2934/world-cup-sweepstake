@@ -151,6 +151,35 @@ function getPlayerByTeam(team) {
   return null;
 }
 
+function renderGoldenBoot() {
+  const container = document.getElementById("golden-boot");
+  if (!container || !sweepstake.goldenBoot) return;
+
+  const topScorers = sweepstake.goldenBoot
+    .slice()
+    .sort((a, b) => b.goals - a.goals)
+    .slice(0, 5);
+
+  container.innerHTML = `
+    <div class="golden-boot-header">
+      <div>Rank</div>
+      <div>Player</div>
+      <div>Team</div>
+      <div>Owner</div>
+      <div>Goals</div>
+    </div>
+    ${topScorers.map((scorer, index) => `
+      <div class="golden-boot-row">
+        <div>${index + 1}</div>
+        <div>${scorer.player}</div>
+        <div>${scorer.team}</div>
+        <div>${getPlayerByTeam(scorer.team) || "—"}</div>
+        <div>${scorer.goals}</div>
+      </div>
+    `).join("")}
+  `;
+}
+
 function renderNextFixtures() {
   const container = document.getElementById("next-fixtures");
   if (!container || !sweepstake.fixtures) return;
@@ -353,6 +382,7 @@ function init() {
   renderPlayers();
   updateSummary();
   renderNextFixtures();
+  renderGoldenBoot();
 }
 
 init();
