@@ -153,9 +153,17 @@ function getPlayerByTeam(team) {
 
 function renderGoldenBoot() {
   const container = document.getElementById("golden-boot");
-  if (!container || !sweepstake.goldenBoot) return;
+  if (!container) return;
 
-  const topScorers = sweepstake.goldenBoot
+  const scorers = Array.isArray(sweepstake.goldenBoot) ? sweepstake.goldenBoot : [];
+  if (scorers.length === 0) {
+    container.innerHTML = `
+      <div class="golden-boot-empty">No golden boot data available.</div>
+    `;
+    return;
+  }
+
+  const topScorers = scorers
     .slice()
     .sort((a, b) => b.goals - a.goals)
     .slice(0, 5);
