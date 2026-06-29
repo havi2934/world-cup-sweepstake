@@ -189,6 +189,43 @@ main {
   opacity: 0.7;
 }
 
+/* FIXTURE STYLES */
+.next-fixture-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  gap: 16px;
+}
+
+.next-fixture-row.live {
+  border-color: rgba(255, 84, 84, 0.35);
+  background: rgba(255, 84, 84, 0.08);
+}
+
+.fixture-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.8;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #ff5454;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 /* RULES */
 .rules {
   background: rgba(255,255,255,0.03);

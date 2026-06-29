@@ -94,6 +94,27 @@ function parseDateTime(fixture) {
   return new Date(`${fixture.date}T${fixture.time}:00`);
 }
 
+function getFixtureEndTime(fixture) {
+  const durationMinutes = fixture.durationMinutes || 120;
+  return new Date(parseDateTime(fixture).getTime() + durationMinutes * 60 * 1000);
+}
+
+function getFixtureStatus(fixture) {
+  const now = new Date();
+  const start = parseDateTime(fixture);
+  const end = getFixtureEndTime(fixture);
+
+  if (now >= start && now < end) {
+    return "live";
+  }
+
+  if (now < start) {
+    return "upcoming";
+  }
+
+  return "finished";
+}
+
 /* =========================
    FIXTURES FEATURE
 ========================= */
@@ -101,7 +122,7 @@ function getUpcomingFixtures(fixtures) {
   const now = new Date();
 
   return fixtures
-    .filter(f => parseDateTime(f) >= now)
+    .filter(f => getFixtureStatus(f) !== "finished")
     .sort((a, b) => parseDateTime(a) - parseDateTime(b));
 }
 
@@ -127,9 +148,11 @@ function renderNextFixtures() {
     ${fixtures.map(f => {
       const homePlayer = getPlayerByTeam(f.home);
       const awayPlayer = getPlayerByTeam(f.away);
+      const status = getFixtureStatus(f);
+      const isLive = status === "live";
 
       return `
-        <div class="next-fixture-row">
+        <div class="next-fixture-row${isLive ? " live" : ""}">
           <div>
             <strong>${f.home}</strong>
             <span class="owner">(${homePlayer || "—"})</span>
@@ -138,12 +161,10 @@ function renderNextFixtures() {
             <span class="owner">(${awayPlayer || "—"})</span>
           </div>
 
-          <div style="opacity:0.7">
-            ${parseDateTime(f).toLocaleDateString("en-GB", {
-              weekday: "short",
-              day: "numeric",
-              month: "short"
-            })} • ${f.time}
+          <div class="fixture-meta">
+            ${isLive
+              ? `<span class="live-badge">LIVE</span> ${parseDateTime(f).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}`
+              : `${parseDateTime(f).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })} • ${f.time}`}
           </div>
         </div>
       `;

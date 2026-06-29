@@ -33,7 +33,7 @@ const sweepstake = {
   },
 
   eliminatedTeams: [
-    { team: "South Africa", round: "Group stage" }
+    { team: "South Africa", round: "R32" }
   ],
 
  fixtures: [
