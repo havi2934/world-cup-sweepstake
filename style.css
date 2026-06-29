@@ -137,6 +137,15 @@ main {
   background: rgba(255,255,255,0.02);
 }
 
+.leaderboard-row.winner {
+  background: rgba(102, 178, 255, 0.16);
+  border-color: rgba(102, 178, 255, 0.35);
+}
+
+.leaderboard-row.winner div {
+  font-weight: 600;
+}
+
 .leaderboard-row div {
   white-space: nowrap;
   overflow: hidden;
@@ -161,6 +170,11 @@ main {
 .golden-boot-row {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.05);
+}
+
+.golden-boot-row.winner {
+  background: rgba(255, 206, 15, 0.12);
+  border-color: rgba(255, 206, 15, 0.4);
 }
 
 .golden-boot-row:nth-child(even) {

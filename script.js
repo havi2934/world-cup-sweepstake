@@ -177,7 +177,7 @@ function renderGoldenBoot() {
       <div>Goals</div>
     </div>
     ${topScorers.map((scorer, index) => `
-      <div class="golden-boot-row">
+      <div class="golden-boot-row${index === 0 ? " winner" : ""}">
         <div>${index + 1}</div>
         <div>${scorer.player}</div>
         <div>${scorer.team}</div>
@@ -275,10 +275,10 @@ function renderLeaderboard() {
     <div class="leaderboard-header">
       <div>Pos</div>
       <div>Player</div>
-      <div>Teams Left / Last Round</div>
+      <div>Teams Left</div>
     </div>
     ${rows.map((r, i) => `
-      <div class="leaderboard-row">
+      <div class="leaderboard-row${positions[i] === 1 ? " winner" : ""}">
         <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
         <div>${r.player}</div>
         <div>${r.remaining === 0 ? r.eliminationRound || "—" : r.remaining}</div>
@@ -330,10 +330,10 @@ function renderBestOfRest() {
     <div class="leaderboard-header">
       <div>Pos</div>
       <div>Player</div>
-      <div>Teams Left / Last Round</div>
+      <div>Teams Left</div>
     </div>
     ${players.map((p, i) => `
-      <div class="leaderboard-row">
+      <div class="leaderboard-row${positions[i] === 1 ? " winner" : ""}">
         <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
         <div>${p.player}</div>
         <div>${p.remaining === 0 ? p.eliminationRound || "—" : p.remaining}</div>
