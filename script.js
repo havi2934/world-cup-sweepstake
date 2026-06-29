@@ -88,6 +88,19 @@ function getAllPlayerTeams(player) {
   return [playerData.topSix, playerData.midTier, ...playerData.restOfWorld];
 }
 
+function renderTeam(team) {
+  const eliminated = isEliminated(team);
+  const eliminationRound = getEliminationRound(team);
+  const marker = eliminated ? "❌ " : "";
+
+  return `
+    <div class="team ${eliminated ? "out" : "alive"}">
+      ${marker}<img class="flag" src="${flagUrl(team)}" alt="${team} flag">
+      ${team}${eliminated && eliminationRound ? ` (${eliminationRound})` : ""}
+    </div>
+  `;
+}
+
 /* IMPORTANT: fixes JS date parsing issues */
 
 function parseDateTime(fixture) {
@@ -300,40 +313,13 @@ function renderPlayers() {
 
           <div class="teams">
             <div style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 8px; font-weight: 600;">Top 6</div>
-            ${[playerData.topSix].map(team => {
-              const eliminated = isEliminated(team);
-              const eliminationRound = getEliminationRound(team);
-              return `
-                <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? `❌${eliminationRound ? ` (${eliminationRound})` : ""}` : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
-                  ${team}
-                </div>
-              `;
-            }).join("")}
+            ${renderTeam(playerData.topSix)}
 
             <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">7-12 Seeds</div>
-            ${[playerData.midTier].map(team => {
-              const eliminated = isEliminated(team);
-              const eliminationRound = getEliminationRound(team);
-              return `
-                <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? `❌${eliminationRound ? ` (${eliminationRound})` : ""}` : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
-                  ${team}
-                </div>
-              `;
-            }).join("")}
+            ${renderTeam(playerData.midTier)}
 
             <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">Best of the Rest</div>
-            ${playerData.restOfWorld.map(team => {
-              const eliminated = isEliminated(team);
-              const eliminationRound = getEliminationRound(team);
-              return `
-                <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? `❌${eliminationRound ? ` (${eliminationRound})` : ""}` : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
-                  ${team}
-                </div>
-              `;
-            }).join("")}
+            ${playerData.restOfWorld.map(team => renderTeam(team)).join("")}
           </div>
 
           <div class="footer">
