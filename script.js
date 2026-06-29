@@ -54,21 +54,23 @@ function getRemainingTeams(playerTeams) {
 }
 
 /* IMPORTANT: fixes JS date parsing issues */
-function parseDate(dateStr) {
-  return new Date(dateStr + "T00:00:00");
+
+
+function parseDateTime(fixture) {
+  return new Date(`${fixture.date}T${fixture.time}:00`);
 }
 
 /* =========================
    FIXTURES FEATURE
 ========================= */
 function getUpcomingFixtures(fixtures) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const now = new Date();
 
   return fixtures
-    .filter(f => parseDate(f.date) >= today)
-    .sort((a, b) => parseDate(a.date) - parseDate(b.date));
+    .filter(f => parseDateTime(f) >= now)
+    .sort((a, b) => parseDateTime(a) - parseDateTime(b));
 }
+
 
 function getNextThreeFixtures(fixtures) {
   return getUpcomingFixtures(fixtures).slice(0, 3);
