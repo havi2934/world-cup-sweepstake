@@ -141,12 +141,15 @@ function renderLeaderboard() {
       return a.player.localeCompare(b.player);
     });
 
-  const positions = rows.map((row, index) => {
-    if (index === 0) return 1;
-    if (rows[index].remaining === rows[index - 1].remaining) {
-      return positions[index - 1];
+  const positions = [];
+  rows.forEach((row, index) => {
+    if (index === 0) {
+      positions.push(1);
+    } else if (rows[index].remaining === rows[index - 1].remaining) {
+      positions.push(positions[index - 1]);
+    } else {
+      positions.push(index + 1);
     }
-    return index + 1;
   });
 
   leaderboard.innerHTML = `
@@ -185,12 +188,15 @@ function renderBestOfRest() {
       return a.player.localeCompare(b.player);
     });
 
-  const positions = players.map((row, index) => {
-    if (index === 0) return 1;
-    if (players[index].remaining === players[index - 1].remaining) {
-      return positions[index - 1];
+  const positions = [];
+  players.forEach((row, index) => {
+    if (index === 0) {
+      positions.push(1);
+    } else if (players[index].remaining === players[index - 1].remaining) {
+      positions.push(positions[index - 1]);
+    } else {
+      positions.push(index + 1);
     }
-    return index + 1;
   });
 
   container.innerHTML = `
