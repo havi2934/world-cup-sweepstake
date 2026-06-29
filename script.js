@@ -141,7 +141,6 @@ function renderLeaderboard() {
       return a.player.localeCompare(b.player);
     });
 
-  // Calculate positions with ties
   const positions = rows.map((row, index) => {
     if (index === 0) return 1;
     if (rows[index].remaining === rows[index - 1].remaining) {
@@ -186,7 +185,6 @@ function renderBestOfRest() {
       return a.player.localeCompare(b.player);
     });
 
-  // Calculate positions with ties
   const positions = players.map((row, index) => {
     if (index === 0) return 1;
     if (players[index].remaining === players[index - 1].remaining) {
@@ -209,6 +207,66 @@ function renderBestOfRest() {
       </div>
     `).join("")}
   `;
+}
+
+/* =========================
+   PLAYERS
+========================= */
+
+function renderPlayers() {
+  const container = document.getElementById("players");
+
+  container.innerHTML = Object.entries(sweepstake.players)
+    .map(([player, playerData]) => {
+      const allTeams = getAllPlayerTeams(player);
+      const remainingTeams = getRemainingTeams(allTeams);
+
+      return `
+        <div class="player-card">
+          <h3>${player}</h3>
+
+          <div class="teams">
+            <div style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 8px; font-weight: 600;">Top 6</div>
+            ${[playerData.topSix].map(team => {
+              const eliminated = isEliminated(team);
+              return `
+                <div class="team ${eliminated ? "out" : "alive"}">
+                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${team}
+                </div>
+              `;
+            }).join("")}
+
+            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">7-12 Seeds</div>
+            ${[playerData.midTier].map(team => {
+              const eliminated = isEliminated(team);
+              return `
+                <div class="team ${eliminated ? "out" : "alive"}">
+                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${team}
+                </div>
+              `;
+            }).join("")}
+
+            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">Best of the Rest</div>
+            ${playerData.restOfWorld.map(team => {
+              const eliminated = isEliminated(team);
+              return `
+                <div class="team ${eliminated ? "out" : "alive"}">
+                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${team}
+                </div>
+              `;
+            }).join("")}
+          </div>
+
+          <div class="footer">
+            ${remainingTeams.length} teams remaining
+          </div>
+        </div>
+      `;
+    })
+    .join("");
 }
 
 /* =========================
