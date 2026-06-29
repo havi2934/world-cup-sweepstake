@@ -141,6 +141,15 @@ function renderLeaderboard() {
       return a.player.localeCompare(b.player);
     });
 
+  // Calculate positions with ties
+  const positions = rows.map((row, index) => {
+    if (index === 0) return 1;
+    if (rows[index].remaining === rows[index - 1].remaining) {
+      return positions[index - 1];
+    }
+    return index + 1;
+  });
+
   leaderboard.innerHTML = `
     <div class="leaderboard-header">
       <div>Pos</div>
@@ -149,7 +158,7 @@ function renderLeaderboard() {
     </div>
     ${rows.map((r, i) => `
       <div class="leaderboard-row">
-        <div>${i + 1}</div>
+        <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
         <div>${r.player}</div>
         <div>${r.remaining}</div>
       </div>
@@ -158,64 +167,8 @@ function renderLeaderboard() {
 }
 
 /* =========================
-   PLAYERS
+   BEST OF REST
 ========================= */
-
-function renderPlayers() {
-  const container = document.getElementById("players");
-
-  container.innerHTML = Object.entries(sweepstake.players)
-    .map(([player, playerData]) => {
-      const allTeams = getAllPlayerTeams(player);
-      const remainingTeams = getRemainingTeams(allTeams);
-
-      return `
-        <div class="player-card">
-          <h3>${player}</h3>
-
-          <div class="teams">
-            <div style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 8px; font-weight: 600;">Top 6</div>
-            ${[playerData.topSix].map(team => {
-              const eliminated = isEliminated(team);
-              return `
-                <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
-                  ${team}
-                </div>
-              `;
-            }).join("")}
-
-            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">7-12 Seeds</div>
-            ${[playerData.midTier].map(team => {
-              const eliminated = isEliminated(team);
-              return `
-                <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
-                  ${team}
-                </div>
-              `;
-            }).join("")}
-
-            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">Best of the Rest</div>
-            ${playerData.restOfWorld.map(team => {
-              const eliminated = isEliminated(team);
-              return `
-                <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
-                  ${team}
-                </div>
-              `;
-            }).join("")}
-          </div>
-
-          <div class="footer">
-            ${remainingTeams.length} teams remaining
-          </div>
-        </div>
-      `;
-    })
-    .join("");
-}
 
 function renderBestOfRest() {
   const container = document.getElementById("best-of-rest");
@@ -225,8 +178,7 @@ function renderBestOfRest() {
       const remaining = getRemainingTeams(playerData.restOfWorld);
       return {
         player,
-        remaining: remaining.length,
-        teams: remaining
+        remaining: remaining.length
       };
     })
     .sort((a, b) => {
@@ -234,12 +186,26 @@ function renderBestOfRest() {
       return a.player.localeCompare(b.player);
     });
 
+  // Calculate positions with ties
+  const positions = players.map((row, index) => {
+    if (index === 0) return 1;
+    if (players[index].remaining === players[index - 1].remaining) {
+      return positions[index - 1];
+    }
+    return index + 1;
+  });
+
   container.innerHTML = `
+    <div class="leaderboard-header">
+      <div>Pos</div>
+      <div>Player</div>
+      <div>Teams Left</div>
+    </div>
     ${players.map((p, i) => `
-      <div class="best-of-rest-row">
-        <div style="font-weight: 600;">${i + 1}. ${p.player}</div>
-        <div style="opacity: 0.7;">${p.remaining} team${p.remaining !== 1 ? "s" : ""} remaining</div>
-        <div>${p.teams.map(team => `<img class="flag" src="${flagUrl(team)}" alt="${team}" title="${team}">`).join('')}</div>
+      <div class="leaderboard-row">
+        <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
+        <div>${p.player}</div>
+        <div>${p.remaining}</div>
       </div>
     `).join("")}
   `;
@@ -263,8 +229,8 @@ function updateSummary() {
 
 function init() {
   renderLeaderboard();
-  renderPlayers();
   renderBestOfRest();
+  renderPlayers();
   updateSummary();
   renderNextFixtures();
 }
