@@ -105,12 +105,12 @@ function renderNextFixtures() {
           </div>
 
           <div style="opacity:0.7">
-            ${parseDate(f.date).toLocaleDateString("en-GB", {
-              weekday: "short",
-              day: "numeric",
-              month: "short"
-            })}
-          </div>
+  ${parseDateTime(f).toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short"
+  })} • ${f.time}
+</div>
         </div>
       `;
     }).join("")}
