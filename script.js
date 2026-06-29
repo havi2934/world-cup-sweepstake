@@ -45,8 +45,38 @@ function flagUrl(team) {
   return code ? `https://flagcdn.com/w40/${code}.png` : "";
 }
 
+const eliminationRoundOrder = {
+  "Group stage": 1,
+  "R32": 2,
+  "R16": 3,
+  "QF": 4,
+  "SF": 5,
+  "Final": 6,
+  "Winner": 7
+};
+
+function getEliminationInfo(team) {
+  return sweepstake.eliminatedTeams.find(item => item.team === team) || null;
+}
+
 function isEliminated(team) {
-  return sweepstake.eliminatedTeams.includes(team);
+  return !!getEliminationInfo(team);
+}
+
+function getEliminationRound(team) {
+  const info = getEliminationInfo(team);
+  return info ? info.round : null;
+}
+
+function roundRank(round) {
+  return eliminationRoundOrder[round] || 0;
+}
+
+function getMaxEliminationRound(teams) {
+  return teams
+    .map(getEliminationRound)
+    .filter(Boolean)
+    .sort((a, b) => roundRank(b) - roundRank(a))[0] || null;
 }
 
 function getRemainingTeams(playerTeams) {
@@ -131,13 +161,21 @@ function renderLeaderboard() {
   const rows = Object.entries(sweepstake.players)
     .map(([player, playerData]) => {
       const allTeams = getAllPlayerTeams(player);
+      const remaining = getRemainingTeams(allTeams).length;
+      const eliminationRound = remaining === 0 ? getMaxEliminationRound(allTeams) : null;
+
       return {
         player,
-        remaining: getRemainingTeams(allTeams).length
+        remaining,
+        eliminationRound,
+        eliminationRank: eliminationRound ? roundRank(eliminationRound) : 0
       };
     })
     .sort((a, b) => {
       if (b.remaining !== a.remaining) return b.remaining - a.remaining;
+      if (a.remaining === 0 && b.remaining === 0 && b.eliminationRank !== a.eliminationRank) {
+        return b.eliminationRank - a.eliminationRank;
+      }
       return a.player.localeCompare(b.player);
     });
 
@@ -156,13 +194,13 @@ function renderLeaderboard() {
     <div class="leaderboard-header">
       <div>Pos</div>
       <div>Player</div>
-      <div>Teams Left</div>
+      <div>Teams Left / Last Round</div>
     </div>
     ${rows.map((r, i) => `
       <div class="leaderboard-row">
         <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
         <div>${r.player}</div>
-        <div>${r.remaining}</div>
+        <div>${r.remaining === 0 ? r.eliminationRound || "—" : r.remaining}</div>
       </div>
     `).join("")}
   `;
@@ -177,14 +215,22 @@ function renderBestOfRest() {
   
   const players = Object.entries(sweepstake.players)
     .map(([player, playerData]) => {
-      const remaining = getRemainingTeams(playerData.restOfWorld);
+      const remainingTeams = getRemainingTeams(playerData.restOfWorld);
+      const remaining = remainingTeams.length;
+      const eliminationRound = remaining === 0 ? getMaxEliminationRound(playerData.restOfWorld) : null;
+
       return {
         player,
-        remaining: remaining.length
+        remaining,
+        eliminationRound,
+        eliminationRank: eliminationRound ? roundRank(eliminationRound) : 0
       };
     })
     .sort((a, b) => {
       if (b.remaining !== a.remaining) return b.remaining - a.remaining;
+      if (a.remaining === 0 && b.remaining === 0 && b.eliminationRank !== a.eliminationRank) {
+        return b.eliminationRank - a.eliminationRank;
+      }
       return a.player.localeCompare(b.player);
     });
 
@@ -203,13 +249,13 @@ function renderBestOfRest() {
     <div class="leaderboard-header">
       <div>Pos</div>
       <div>Player</div>
-      <div>Teams Left</div>
+      <div>Teams Left / Last Round</div>
     </div>
     ${players.map((p, i) => `
       <div class="leaderboard-row">
         <div>${positions[i]}${i > 0 && positions[i] === positions[i - 1] ? " (T)" : ""}</div>
         <div>${p.player}</div>
-        <div>${p.remaining}</div>
+        <div>${p.remaining === 0 ? p.eliminationRound || "—" : p.remaining}</div>
       </div>
     `).join("")}
   `;
@@ -235,9 +281,10 @@ function renderPlayers() {
             <div style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 8px; font-weight: 600;">Top 6</div>
             ${[playerData.topSix].map(team => {
               const eliminated = isEliminated(team);
+              const eliminationRound = getEliminationRound(team);
               return `
                 <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${eliminated ? `❌${eliminationRound ? ` (${eliminationRound})` : ""}` : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
                   ${team}
                 </div>
               `;
@@ -246,9 +293,10 @@ function renderPlayers() {
             <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">7-12 Seeds</div>
             ${[playerData.midTier].map(team => {
               const eliminated = isEliminated(team);
+              const eliminationRound = getEliminationRound(team);
               return `
                 <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${eliminated ? `❌${eliminationRound ? ` (${eliminationRound})` : ""}` : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
                   ${team}
                 </div>
               `;
@@ -257,9 +305,10 @@ function renderPlayers() {
             <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">Best of the Rest</div>
             ${playerData.restOfWorld.map(team => {
               const eliminated = isEliminated(team);
+              const eliminationRound = getEliminationRound(team);
               return `
                 <div class="team ${eliminated ? "out" : "alive"}">
-                  ${eliminated ? "❌" : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
+                  ${eliminated ? `❌${eliminationRound ? ` (${eliminationRound})` : ""}` : `<img class="flag" src="${flagUrl(team)}" alt="${team} flag">`}
                   ${team}
                 </div>
               `;
