@@ -454,7 +454,21 @@ footer {
 
   .golden-boot-header,
   .golden-boot-row {
-    grid-template-columns: 35px 1fr 110px 110px 60px;
+    grid-template-columns: 35px minmax(90px, 1.5fr) minmax(70px, 1fr) minmax(70px, 1fr) 45px;
+    gap: 6px;
+    align-items: start;
+  }
+
+  .golden-boot-header div,
+  .golden-boot-row div {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  .golden-boot-header div:nth-child(2),
+  .golden-boot-row div:nth-child(2) {
+    min-width: 0;
   }
 
   .leaderboard-header {
