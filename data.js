@@ -36,14 +36,15 @@ const sweepstake = {
     { team: "South Africa", round: "R32" },
     { team: "Japan", round: "R32" },
     { team: "Germany", round: "R32"},
-    { team: "Netherlands", round: "R32"}
+    { team: "Netherlands", round: "R32"},
+    { team: "Ivory Coast", round: "R32"}
   ],
 
   goldenBoot: [
     { player: "Lionel Messi", team: "Argentina", goals: 6 },
     { player: "Ousmane Dembélé", team: "France", goals: 4 },
     { player: "Harry Kane", team: "England", goals: 4 },
-    { player: "Erling Haaland", team: "Norway", goals: 4 },
+    { player: "Erling Haaland", team: "Norway", goals: 5 },
     { player: "Vinicus Junior", team: "Brazil", goals: 4 }
   ],
 
