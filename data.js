@@ -34,7 +34,9 @@ const sweepstake = {
 
   eliminatedTeams: [
     { team: "South Africa", round: "R32" },
-    { team: "Japan", round: "R32" }
+    { team: "Japan", round: "R32" },
+    { team: "Germany", round: "R32"},
+    { team: "Netherlands", round: "R32"}
   ],
 
   goldenBoot: [
