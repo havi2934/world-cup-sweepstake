@@ -10,7 +10,8 @@ const sweepstakeData = {
     { team: "Ecuador", round: "R32" },
     { team: "DR Congo", round: "R32" },
     { team: "Senegal", round: "R32" },
-    { team: "Bosnia and Herzegovina", round: "R32" }
+    { team: "Bosnia and Herzegovina", round: "R32" },
+    { team: "Spain", round: "R32" },
   ],
   sweepstakes: {
     main: {
