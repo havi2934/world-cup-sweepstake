@@ -15,7 +15,7 @@ const sweepstakeData = {
   sweepstakes: {
     main: {
       id: "main",
-      title: "World Cup Sweepstake 2026",
+      title: "⚽ World Cup Sweepstake 2026",
       description: "Each participant is assigned 5 national teams (1 top-6, 1 mid-tier, 3 best of the rest).",
       playerCategories: [
         { key: "topSix", label: "Top 6", icon: "", single: true },
@@ -157,7 +157,7 @@ const sweepstakeData = {
     },
     teamDraw: {
       id: "teamDraw",
-      title: "⚽ World Cup Sweepstake 2026 — Team Draw",
+      title: "⚽ World Cup Sweepstake 2026",
       description: "Each player gets 1 Green team, 1 Red team, and 6 Neutral teams.",
       playerCategories: [
         { key: "greenTeam", label: "Green Team", icon: "🟩", single: true },
