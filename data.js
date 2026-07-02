@@ -50,7 +50,7 @@ const sweepstake = {
     { player: "Ousmane Dembélé", team: "France", goals: 4 },
     { player: "Harry Kane", team: "England", goals: 5 },
     { player: "Erling Haaland", team: "Norway", goals: 4 },
-    { player: "Vinicus Junior", team: "Brazil", goals: 5 },
+    { player: "Vinicus Junior", team: "Brazil", goals: 4 },
     { player: "Kylian Mbappé", team: "France", goals: 6 }
   ],
 
