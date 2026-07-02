@@ -40,7 +40,9 @@ const sweepstake = {
     { team: "Ivory Coast", round: "R32" },
     { team: "Sweden", round: "R32" },
     { team: "Ecuador", round: "R32" },
-    { team: "DR Congo", round: "R32" }
+    { team: "DR Congo", round: "R32" },
+    { team: "Senegal", round: "R32" },
+    { team: "Bosnia and Herzegovina", round: "R32" }
   ],
 
   goldenBoot: [
