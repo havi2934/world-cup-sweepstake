@@ -196,7 +196,6 @@ const sweepstakeData = {
     }
   }
 };
-};
 
 const sweepstakeId = window.sweepstakeId || new URLSearchParams(window.location.search).get("sweepstake") || sweepstakeData.defaultSweepstakeId;
 const sweepstake = sweepstakeData.sweepstakes[sweepstakeId] || sweepstakeData.sweepstakes[sweepstakeData.defaultSweepstakeId];
