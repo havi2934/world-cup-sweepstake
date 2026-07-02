@@ -107,58 +107,6 @@ main {
   margin-bottom: 40px;
 }
 
-.participant-select {
-  width: 100%;
-  max-width: 420px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: inherit;
-  font-size: 1rem;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(140px, 1fr));
-  gap: 16px;
-}
-
-.team-groups {
-  display: grid;
-  gap: 18px;
-}
-
-.team-group {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
-  padding: 18px;
-}
-
-.team-group h3 {
-  margin-bottom: 12px;
-}
-
-.team-detail {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-.team-detail.alive {
-  border-color: rgba(46, 204, 113, 0.24);
-  background: rgba(46, 204, 113, 0.1);
-}
-
-.team-detail.out {
-  opacity: 0.7;
-}
 
 .section h2 {
   margin-bottom: 16px;
@@ -386,6 +334,14 @@ main {
 .rules p {
   margin-bottom: 8px;
   opacity: 0.85;
+}
+
+.empty-state {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.8);
 }
 
 /* FOOTER */

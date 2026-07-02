@@ -33,15 +33,32 @@ const countryCodes = {
   "DR Congo": "cd",
   "Sweden": "se",
   "Colombia": "co",
-  "Spain": "es"
+  "Spain": "es",
+  "Norway": "no",
+  "Canada": "ca",
+  "Curaçao": "cw",
+  "Haiti": "ht",
+  "United States": "us",
+  "Cabo Verde": "cv"
+};
+
+const countryCodeAliases = {
+  "Bosnia & Herzegovina": "Bosnia and Herzegovina",
+  "United States of America": "USA",
+  "United States": "USA",
 };
 
 /* =========================
    HELPERS
 ========================= */
 
+function normalizeCountryName(team) {
+  return countryCodeAliases[team?.trim()] || team?.trim();
+}
+
 function flagUrl(team) {
-  const code = countryCodes[team];
+  const normalized = normalizeCountryName(team);
+  const code = countryCodes[normalized];
   return code ? `https://flagcdn.com/w40/${code}.png` : "";
 }
 
@@ -56,7 +73,7 @@ const eliminationRoundOrder = {
 };
 
 function getEliminationInfo(team) {
-  return sweepstake.eliminatedTeams.find(item => item.team === team) || null;
+  return (sweepstakeData.eliminatedTeams || []).find(item => item.team === team) || null;
 }
 
 function isEliminated(team) {
@@ -83,9 +100,33 @@ function getRemainingTeams(playerTeams) {
   return playerTeams.filter(team => !isEliminated(team));
 }
 
+function getPlayerCategories() {
+  return Array.isArray(sweepstake.playerCategories) ? sweepstake.playerCategories : [];
+}
+
+function getPlayerCategory(categoryKey) {
+  return getPlayerCategories().find(category => category.key === categoryKey) || { key: categoryKey, label: categoryKey, icon: "", single: false };
+}
+
+function getPlayerCategoryKeys() {
+  return getPlayerCategories().map(category => category.key);
+}
+
+function getPlayerTeams(player, categoryKey) {
+  const playerData = sweepstake.players[player] || {};
+  const teamValue = playerData[categoryKey];
+  if (Array.isArray(teamValue)) return teamValue;
+  if (teamValue) return [teamValue];
+  return [];
+}
+
 function getAllPlayerTeams(player) {
-  const playerData = sweepstake.players[player];
-  return [playerData.topSix, playerData.midTier, ...playerData.restOfWorld];
+  return getPlayerCategoryKeys().flatMap(categoryKey => getPlayerTeams(player, categoryKey));
+}
+
+function getSecondaryCategory() {
+  const categories = getPlayerCategories();
+  return categories.find(category => category.bestOfRest) || categories.find(category => !category.single) || categories[0] || null;
 }
 
 function renderTeam(team) {
@@ -145,20 +186,43 @@ function getNextThreeFixtures(fixtures) {
 
 function getPlayerByTeam(team) {
   for (const [player, playerData] of Object.entries(sweepstake.players)) {
-    const allTeams = [playerData.topSix, playerData.midTier, ...playerData.restOfWorld];
+    const allTeams = getPlayerCategoryKeys().flatMap(categoryKey => {
+      const value = playerData[categoryKey];
+      if (Array.isArray(value)) return value;
+      if (value) return [value];
+      return [];
+    });
     if (allTeams.includes(team)) return player;
   }
   return null;
+}
+
+function getFixtures() {
+  if (Array.isArray(sweepstake.fixtures) && sweepstake.fixtures.length) return sweepstake.fixtures;
+  const defaultId = (typeof sweepstakeData !== 'undefined' && sweepstakeData.defaultSweepstakeId) ? sweepstakeData.defaultSweepstakeId : null;
+  if (defaultId && sweepstakeData && sweepstakeData.sweepstakes && sweepstakeData.sweepstakes[defaultId]) {
+    return sweepstakeData.sweepstakes[defaultId].fixtures || [];
+  }
+  return [];
+}
+
+function getGoldenBoot() {
+  if (Array.isArray(sweepstake.goldenBoot) && sweepstake.goldenBoot.length) return sweepstake.goldenBoot;
+  const defaultId = (typeof sweepstakeData !== 'undefined' && sweepstakeData.defaultSweepstakeId) ? sweepstakeData.defaultSweepstakeId : null;
+  if (defaultId && sweepstakeData && sweepstakeData.sweepstakes && sweepstakeData.sweepstakes[defaultId]) {
+    return sweepstakeData.sweepstakes[defaultId].goldenBoot || [];
+  }
+  return [];
 }
 
 function renderGoldenBoot() {
   const container = document.getElementById("golden-boot");
   if (!container) return;
 
-  const scorers = Array.isArray(sweepstake.goldenBoot) ? sweepstake.goldenBoot : [];
+  const scorers = getGoldenBoot();
   if (scorers.length === 0) {
     container.innerHTML = `
-      <div class="golden-boot-empty">No golden boot data available.</div>
+      <div class="empty-state">No golden boot data available.</div>
     `;
     return;
   }
@@ -190,9 +254,15 @@ function renderGoldenBoot() {
 
 function renderNextFixtures() {
   const container = document.getElementById("next-fixtures");
-  if (!container || !sweepstake.fixtures) return;
+  if (!container) return;
 
-  const fixtures = getNextThreeFixtures(sweepstake.fixtures);
+  const fixtures = getNextThreeFixtures(getFixtures());
+  if (fixtures.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">No fixtures available for this sweepstake.</div>
+    `;
+    return;
+  }
 
   container.innerHTML = `
     ${fixtures.map(f => {
@@ -293,12 +363,19 @@ function renderLeaderboard() {
 
 function renderBestOfRest() {
   const container = document.getElementById("best-of-rest");
-  
+  if (!container) return;
+
+  const secondaryCategory = getSecondaryCategory();
+  if (!secondaryCategory) {
+    container.innerHTML = `<div class="empty-state">No secondary leaderboard configured for this sweepstake.</div>`;
+    return;
+  }
+
   const players = Object.entries(sweepstake.players)
-    .map(([player, playerData]) => {
-      const remainingTeams = getRemainingTeams(playerData.restOfWorld);
+    .map(([player]) => {
+      const remainingTeams = getRemainingTeams(getPlayerTeams(player, secondaryCategory.key));
       const remaining = remainingTeams.length;
-      const eliminationRound = remaining === 0 ? getMaxEliminationRound(playerData.restOfWorld) : null;
+      const eliminationRound = remaining === 0 ? getMaxEliminationRound(getPlayerTeams(player, secondaryCategory.key)) : null;
 
       return {
         player,
@@ -348,9 +425,11 @@ function renderBestOfRest() {
 
 function renderPlayers() {
   const container = document.getElementById("players");
+  const categories = getPlayerCategories();
 
   container.innerHTML = Object.entries(sweepstake.players)
-    .map(([player, playerData]) => {
+    .map(([player]) => {
+      const playerData = sweepstake.players[player];
       const allTeams = getAllPlayerTeams(player);
       const remainingTeams = getRemainingTeams(allTeams);
 
@@ -359,14 +438,17 @@ function renderPlayers() {
           <h3>${player}</h3>
 
           <div class="teams">
-            <div style="font-size: 0.85rem; opacity: 0.6; margin-bottom: 8px; font-weight: 600;">Top 6</div>
-            ${renderTeam(playerData.topSix)}
+            ${categories.map(category => {
+              const teams = getPlayerTeams(player, category.key);
+              const heading = `${category.icon ? category.icon + ' ' : ''}${category.label}`;
 
-            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">7-12 Seeds</div>
-            ${renderTeam(playerData.midTier)}
-
-            <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">Best of the Rest</div>
-            ${playerData.restOfWorld.map(team => renderTeam(team)).join("")}
+              return `
+                <div style="font-size: 0.85rem; opacity: 0.6; margin-top: 12px; margin-bottom: 8px; font-weight: 600;">
+                  ${heading}
+                </div>
+                ${teams.length > 0 ? teams.map(team => renderTeam(team)).join("") : `<div class="team out">No team assigned</div>`}
+              `;
+            }).join("")}
           </div>
 
           <div class="footer">
@@ -383,18 +465,47 @@ function renderPlayers() {
 ========================= */
 
 function updateSummary() {
-  const totalRemaining = Object.values(sweepstake.players)
-    .flatMap(playerData => [playerData.topSix, playerData.midTier, ...playerData.restOfWorld])
+  const totalRemaining = Object.keys(sweepstake.players)
+    .flatMap(player => getAllPlayerTeams(player))
     .filter(team => !isEliminated(team)).length;
 
-  document.getElementById("teamsRemaining").textContent = totalRemaining;
+  const teamsRemaining = document.getElementById("teamsRemaining");
+  if (teamsRemaining) {
+    teamsRemaining.textContent = totalRemaining;
+  }
+
+  const participantsRemaining = document.getElementById("participantsRemaining");
+  if (participantsRemaining) {
+    participantsRemaining.textContent = Object.keys(sweepstake.players).length;
+  }
 }
 
 /* =========================
    INIT
 ========================= */
 
+function setPageMetadata() {
+  const pageTitle = document.getElementById("pageTitle");
+  const pageSubtitle = document.getElementById("pageSubtitle");
+  const rulesDescription = document.getElementById("rulesDescription");
+  const secondaryHeading = document.getElementById("secondaryHeading");
+
+  if (pageTitle) pageTitle.textContent = sweepstake.title || pageTitle.textContent;
+  if (pageSubtitle) pageSubtitle.textContent = sweepstake.description || pageSubtitle.textContent;
+  if (rulesDescription) rulesDescription.textContent = sweepstake.description || rulesDescription.textContent;
+
+  const secondaryCategory = getSecondaryCategory();
+  if (secondaryHeading && secondaryCategory) {
+    secondaryHeading.textContent = `🌟 ${secondaryCategory.label}`;
+  }
+
+  if (document.title) {
+    document.title = `${sweepstake.title || 'Sweepstake'} | World Cup`;
+  }
+}
+
 function init() {
+  setPageMetadata();
   renderLeaderboard();
   renderBestOfRest();
   renderPlayers();

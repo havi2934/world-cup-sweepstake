@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚽ World Cup Sweepstake 2026 — Team Draw</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <h1 id="pageTitle">WORLD CUP SWEEPSTAKE — TEAM DRAW</h1>
+
+    <div class="summary">
+      <div class="card">
+        <div class="label">Teams Remaining</div>
+        <div id="teamsRemaining" class="value">0</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Participants Remaining</div>
+        <div class="value" id="participantsRemaining">0</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h2>Participants</h2>
+      <div id="players" class="grid"></div>
+    </section>
+
+    <section class="section">
+      <h2>📅  Next Fixtures</h2>
+      <div id="next-fixtures" class="table"></div>
+    </section>
+
+    <div class="leaderboards-container">
+      <section class="section">
+        <h2>🏆 Main Leaderboard</h2>
+        <div id="leaderboard" class="table"></div>
+      </section>
+
+      <section class="section">
+        <h2 id="secondaryHeading">🌟 Secondary Leaderboard</h2>
+        <div id="best-of-rest" class="table"></div>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>🥇 Golden Boot</h2>
+      <div id="golden-boot" class="table"></div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Updated manually after each match ⚽</p>
+  </footer>
+
+  <script>
+    window.sweepstakeId = 'teamDraw';
+    window.dashboardUrl = 'team-draw.html';
+  </script>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
