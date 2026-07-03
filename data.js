@@ -186,11 +186,11 @@ const sweepstakeData = {
         },
         "Deb": {
           greenTeam: "Argentina",
-          neutralTeams: ["Canada", "Morocco", "United States", "Egypt", "Senegal"]
+          neutralTeams: ["Canada", "Morocco", "USA", "Egypt", "Senegal"]
         },
         "Jack": {
           greenTeam: "England",
-          redTeam: "Cabo Verde",
+          redTeam: "Cape Verde",
           neutralTeams: ["Norway", "Colombia"]
         }
       },
