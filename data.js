@@ -12,6 +12,8 @@ const sweepstakeData = {
     { team: "Senegal", round: "R32" },
     { team: "Bosnia and Herzegovina", round: "R32" },
     { team: "Austria", round: "R32" },
+    { team: "Croatia", round: "R32" },
+    { team: "Algeria", round: "R32" },
   ],
   sweepstakes: {
     main: {
