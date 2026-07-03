@@ -174,7 +174,7 @@ const sweepstakeData = {
         },
         "Tom": {
           greenTeam: "Brazil",
-          redTeam: "Bosnia & Herzegovina",
+          redTeam: "Bosnia and Herzegovina",
           neutralTeams: ["Australia"]
         },
         "Chris": {
