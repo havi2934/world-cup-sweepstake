@@ -158,7 +158,55 @@ const sweepstakeData = {
           time: "02:30",
           home: "Colombia",
           away: "Ghana"
-        }
+        },
+  {
+    date: "2026-07-04",
+    time: "18:00",
+    home: "Paraguay",
+    away: "France"
+  },
+  {
+    date: "2026-07-04",
+    time: "22:00",
+    home: "Canada",
+    away: "Morocco"
+  },
+  {
+    date: "2026-07-05",
+    time: "21:00",
+    home: "Brazil",
+    away: "Norway"
+  },
+  {
+    date: "2026-07-06",
+    time: "01:00",
+    home: "Mexico",
+    away: "England"
+  },
+  {
+    date: "2026-07-06",
+    time: "20:00",
+    home: "Portugal",
+    away: "Spain"
+  },
+  {
+    date: "2026-07-07",
+    time: "01:00",
+    home: "USA",
+    away: "Belgium"
+  },
+  {
+    date: "2026-07-07",
+    time: "17:00",
+    home: "Argentina",
+    away: "Egypt"
+  },
+  {
+    date: "2026-07-07",
+    time: "21:00",
+    home: "Switzerland",
+    away: "Colombia"
+  }
       ]
     },
     teamDraw: {
