@@ -14,6 +14,8 @@ const sweepstakeData = {
     { team: "Austria", round: "R32" },
     { team: "Croatia", round: "R32" },
     { team: "Algeria", round: "R32" },
+    { team: "Cape Verde", round: "R32"},
+    { team: "Ghana", round: "R32"},
   ],
   sweepstakes: {
     main: {
@@ -58,7 +60,7 @@ const sweepstakeData = {
         }
       },
       goldenBoot: [
-        { player: "Lionel Messi", team: "Argentina", goals: 6 },
+        { player: "Lionel Messi", team: "Argentina", goals: 7 },
         { player: "Ousmane Dembélé", team: "France", goals: 4 },
         { player: "Harry Kane", team: "England", goals: 5 },
         { player: "Erling Haaland", team: "Norway", goals: 4 },
