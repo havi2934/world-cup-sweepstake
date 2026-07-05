@@ -19,6 +19,7 @@ const sweepstakeData = {
     { team: "Australia", round: "R32"},
     { team: "Canada", round: "R16"},
     { team: "Paraguay", round: "R16"},
+    { team: "Brazil", round: "R16"},
   ],
   sweepstakes: {
     main: {
@@ -66,7 +67,7 @@ const sweepstakeData = {
         { player: "Lionel Messi", team: "Argentina", goals: 7 },
         { player: "Ousmane Dembélé", team: "France", goals: 4 },
         { player: "Harry Kane", team: "England", goals: 5 },
-        { player: "Erling Haaland", team: "Norway", goals: 4 },
+        { player: "Erling Haaland", team: "Norway", goals: 7 },
         { player: "Vinicus Junior", team: "Brazil", goals: 4 },
         { player: "Kylian Mbappé", team: "France", goals: 6 }
       ],
