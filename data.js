@@ -20,6 +20,7 @@ const sweepstakeData = {
     { team: "Canada", round: "R16"},
     { team: "Paraguay", round: "R16"},
     { team: "Brazil", round: "R16"},
+    { team: "Mexico", round: "R16"},
   ],
   sweepstakes: {
     main: {
@@ -66,10 +67,10 @@ const sweepstakeData = {
       goldenBoot: [
         { player: "Lionel Messi", team: "Argentina", goals: 7 },
         { player: "Ousmane Dembélé", team: "France", goals: 4 },
-        { player: "Harry Kane", team: "England", goals: 5 },
+        { player: "Harry Kane", team: "England", goals: 6},
         { player: "Erling Haaland", team: "Norway", goals: 7 },
         { player: "Vinicus Junior", team: "Brazil", goals: 4 },
-        { player: "Kylian Mbappé", team: "France", goals: 6 }
+        { player: "Kylian Mbappé", team: "France", goals: 7 }
       ],
       fixtures: [
         {
