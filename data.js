@@ -21,6 +21,8 @@ const sweepstakeData = {
     { team: "Paraguay", round: "R16"},
     { team: "Brazil", round: "R16"},
     { team: "Mexico", round: "R16"},
+    { team: "Portugal", round: "R16"},
+    { team: "USA", round: "R16"},  
   ],
   sweepstakes: {
     main: {
