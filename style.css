@@ -214,6 +214,16 @@ main {
   font-weight: 600;
 }
 
+.leaderboard-row.winner.best-of-rest-winner {
+  background: rgba(255, 206, 15, 0.16);
+  border-color: rgba(255, 206, 15, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(255, 206, 15, 0.18);
+}
+
+.leaderboard-row.winner.best-of-rest-winner div {
+  font-weight: 700;
+}
+
 .leaderboard-row div {
   white-space: nowrap;
   overflow: hidden;

@@ -129,6 +129,10 @@ function getSecondaryCategory() {
   return categories.find(category => category.bestOfRest) || categories.find(category => !category.single) || categories[0] || null;
 }
 
+function getBestOfRestWinner() {
+  return sweepstake.bestOfRestWinner || null;
+}
+
 function renderTeam(team) {
   const eliminated = isEliminated(team);
   const eliminationRound = getEliminationRound(team);
@@ -371,6 +375,8 @@ function renderBestOfRest() {
     return;
   }
 
+  const bestOfRestWinner = getBestOfRestWinner();
+
   const players = Object.entries(sweepstake.players)
     .map(([player]) => {
       const remainingTeams = getRemainingTeams(getPlayerTeams(player, secondaryCategory.key));
@@ -409,13 +415,16 @@ function renderBestOfRest() {
       <div>Player</div>
       <div>Teams Left</div>
     </div>
-    ${players.map((p, i) => `
-      <div class="leaderboard-row${positions[i] === 1 ? " winner" : ""}">
-        <div>${positions[i]}</div>
-        <div>${p.player}</div>
-        <div>${p.remaining === 0 ? p.eliminationRound || "—" : p.remaining}</div>
-      </div>
-    `).join("")}
+    ${players.map((p, i) => {
+      const isWinner = p.player === bestOfRestWinner;
+      return `
+        <div class="leaderboard-row${positions[i] === 1 || isWinner ? " winner" : ""}${isWinner ? " best-of-rest-winner" : ""}">
+          <div>${positions[i]}</div>
+          <div>${p.player}${isWinner ? " 🏆" : ""}</div>
+          <div>${p.remaining === 0 ? p.eliminationRound || "—" : p.remaining}</div>
+        </div>
+      `;
+    }).join("")}
   `;
 }
 

@@ -31,6 +31,7 @@ const sweepstakeData = {
       id: "main",
       title: "⚽ World Cup Sweepstake 2026",
       description: "Each participant is assigned 5 national teams (1 top-6, 1 mid-tier, 3 best of the rest).",
+      bestOfRestWinner: "Mary",
       playerCategories: [
         { key: "topSix", label: "Top 6", icon: "", single: true },
         { key: "midTier", label: "7-12 Seeds", icon: "", single: true },
