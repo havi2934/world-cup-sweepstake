@@ -23,6 +23,8 @@ const sweepstakeData = {
     { team: "Mexico", round: "R16"},
     { team: "Portugal", round: "R16"},
     { team: "USA", round: "R16"},  
+    {team: "Colombia", round: "R16"},
+    {team: "Egypt", round: "R16"},
   ],
   sweepstakes: {
     main: {
@@ -67,7 +69,7 @@ const sweepstakeData = {
         }
       },
       goldenBoot: [
-        { player: "Lionel Messi", team: "Argentina", goals: 7 },
+        { player: "Lionel Messi", team: "Argentina", goals: 8 },
         { player: "Ousmane Dembélé", team: "France", goals: 4 },
         { player: "Harry Kane", team: "England", goals: 6},
         { player: "Erling Haaland", team: "Norway", goals: 7 },
@@ -212,6 +214,30 @@ const sweepstakeData = {
     time: "21:00",
     home: "Switzerland",
     away: "Colombia"
+  },
+    {
+    date: "2026-07-09",
+    time: "21:00",
+    home: "France",
+    away: "Morocco"
+  },
+  {
+    date: "2026-07-10",
+    time: "20:00",
+    home: "Spain",
+    away: "Belgium"
+  },
+  {
+    date: "2026-07-11",
+    time: "22:00",
+    home: "Norway",
+    away: "England"
+  },
+  {
+    date: "2026-07-12",
+    time: "02:00",
+    home: "Argentina",
+    away: "Switzerland"
   }
       ]
     },
