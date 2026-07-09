@@ -473,6 +473,8 @@ function renderPlayers() {
    SUMMARY
 ========================= */
 
+let lastParticipantsRemaining = null;
+
 function updateSummary() {
   const totalRemaining = Object.keys(sweepstake.players)
     .flatMap(player => getAllPlayerTeams(player))
@@ -483,9 +485,22 @@ function updateSummary() {
     teamsRemaining.textContent = totalRemaining;
   }
 
-  const participantsRemaining = document.getElementById("participantsRemaining");
-  if (participantsRemaining) {
-    participantsRemaining.textContent = Object.keys(sweepstake.players).length;
+  const participantsRemainingEl = document.getElementById("participantsRemaining");
+  if (participantsRemainingEl) {
+    const participantsAlive = Object.keys(sweepstake.players).filter(player => {
+      const allTeams = getAllPlayerTeams(player);
+      return getRemainingTeams(allTeams).length > 0;
+    }).length;
+
+    if (lastParticipantsRemaining !== null && participantsAlive < lastParticipantsRemaining) {
+      participantsRemainingEl.classList.add("pulse-decrease");
+      participantsRemainingEl.addEventListener("animationend", () => {
+        participantsRemainingEl.classList.remove("pulse-decrease");
+      }, { once: true });
+    }
+
+    participantsRemainingEl.textContent = participantsAlive;
+    lastParticipantsRemaining = participantsAlive;
   }
 }
 

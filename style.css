@@ -88,6 +88,25 @@ body {
   margin-top: 4px;
 }
 
+.value.pulse-decrease {
+  animation: pulse-decrease 550ms ease;
+}
+
+@keyframes pulse-decrease {
+  0% {
+    transform: scale(1);
+    color: #eaf0ff;
+  }
+  35% {
+    transform: scale(1.1);
+    color: #ffd26d;
+  }
+  100% {
+    transform: scale(1);
+    color: #eaf0ff;
+  }
+}
+
 .sweepstake-links {
   margin-top: 24px;
 }
