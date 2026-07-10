@@ -25,6 +25,7 @@ const sweepstakeData = {
     { team: "USA", round: "R16"},  
     {team: "Colombia", round: "R16"},
     {team: "Egypt", round: "R16"},
+    {team: "Morocco", round: "QF"},
   ],
   sweepstakes: {
     main: {
@@ -75,7 +76,7 @@ const sweepstakeData = {
         { player: "Harry Kane", team: "England", goals: 6},
         { player: "Erling Haaland", team: "Norway", goals: 7 },
         { player: "Vinicus Junior", team: "Brazil", goals: 4 },
-        { player: "Kylian Mbappé", team: "France", goals: 7 }
+        { player: "Kylian Mbappé", team: "France", goals: 8 }
       ],
       fixtures: [
         {
