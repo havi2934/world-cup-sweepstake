@@ -29,6 +29,7 @@ const sweepstakeData = {
     { team: "Belgium", round: "QF"},
     { team: "Norway", round: "QF"},
     { team: "Switzerland", round: "QF" },
+    { team: "France", round: "SF" },  
   ],
   sweepstakes: {
     main: {
