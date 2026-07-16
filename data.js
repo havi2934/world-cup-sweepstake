@@ -29,7 +29,8 @@ const sweepstakeData = {
     { team: "Belgium", round: "QF"},
     { team: "Norway", round: "QF"},
     { team: "Switzerland", round: "QF" },
-    { team: "France", round: "SF" },  
+    { team: "France", round: "SF" },
+    { team: "England", round: "SF" },
   ],
   sweepstakes: {
     main: {
@@ -256,6 +257,12 @@ const sweepstakeData = {
     date: "2026-07-15",
     time: "20:00",
     home: "England",
+    away: "Argentina"
+  },
+  {
+    date: "2026-07-19",
+    time: "20:00",
+    home: "Spain",
     away: "Argentina"
   }
       ]
